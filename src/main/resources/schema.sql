@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS staff045 (
   leave_date DATE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT email_format_045 CHECK (email REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'),
+  CONSTRAINT email_format_045 CHECK (email REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
   CONSTRAINT fk_staff_department_045 FOREIGN KEY (department_id) REFERENCES department045(id),
   CONSTRAINT fk_staff_position_045 FOREIGN KEY (position_id) REFERENCES position045(id),
   CONSTRAINT fk_staff_title_045 FOREIGN KEY (title_id) REFERENCES title045(id)
@@ -86,8 +86,11 @@ UPDATE department045 SET headcount = headcount - 1 WHERE id = OLD.department_id 
 CREATE TRIGGER trg_staff_department_update045 AFTER UPDATE ON staff045
 FOR EACH ROW
 UPDATE department045 d
-SET headcount = headcount + CASE WHEN d.id = NEW.department_id THEN 1 ELSE 0 END
-                  + CASE WHEN d.id = OLD.department_id THEN -1 ELSE 0 END
+SET headcount = headcount + CASE
+                               WHEN d.id = NEW.department_id THEN 1
+                               WHEN d.id = OLD.department_id THEN -1
+                               ELSE 0
+                             END
 WHERE OLD.department_id <> NEW.department_id
   AND d.id IN (OLD.department_id, NEW.department_id);
 
@@ -102,11 +105,8 @@ CREATE PROCEDURE sp_department_title_counts045()
     ORDER BY d.name, t.name;
 
 -- Seed basic dictionaries for quick start
-INSERT INTO department045(name) VALUES ('教务处'), ('信息中心'), ('人事处')
-AS seed ON DUPLICATE KEY UPDATE name=seed.name;
+INSERT IGNORE INTO department045(name) VALUES ('教务处'), ('信息中心'), ('人事处');
 
-INSERT INTO position045(name) VALUES ('教师'), ('行政'), ('教研员')
-AS seed ON DUPLICATE KEY UPDATE name=seed.name;
+INSERT IGNORE INTO position045(name) VALUES ('教师'), ('行政'), ('教研员');
 
-INSERT INTO title045(name) VALUES ('助教'), ('讲师'), ('副教授'), ('教授')
-AS seed ON DUPLICATE KEY UPDATE name=seed.name;
+INSERT IGNORE INTO title045(name) VALUES ('助教'), ('讲师'), ('副教授'), ('教授');

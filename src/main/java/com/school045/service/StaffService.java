@@ -56,7 +56,7 @@ public class StaffService {
     }
 
     public void saveDepartment(String name) throws SQLException {
-        String sql = "INSERT INTO department045(name) VALUES (?) AS incoming ON DUPLICATE KEY UPDATE name=incoming.name";
+        String sql = "INSERT IGNORE INTO department045(name) VALUES (?)";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -65,7 +65,7 @@ public class StaffService {
     }
 
     public void savePosition(String name) throws SQLException {
-        String sql = "INSERT INTO position045(name) VALUES (?) AS incoming ON DUPLICATE KEY UPDATE name=incoming.name";
+        String sql = "INSERT IGNORE INTO position045(name) VALUES (?)";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -74,7 +74,7 @@ public class StaffService {
     }
 
     public void saveTitle(String name) throws SQLException {
-        String sql = "INSERT INTO title045(name) VALUES (?) AS incoming ON DUPLICATE KEY UPDATE name=incoming.name";
+        String sql = "INSERT IGNORE INTO title045(name) VALUES (?)";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
