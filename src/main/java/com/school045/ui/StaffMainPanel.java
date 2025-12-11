@@ -346,9 +346,9 @@ public class StaffMainPanel extends JPanel {
             List<Department> departments = service.listDepartments();
             List<Position> positions = service.listPositions();
             List<TitleInfo> titles = service.listTitles();
-            updateCombo(departmentCombo, departments.toArray());
-            updateCombo(positionCombo, positions.toArray());
-            updateCombo(titleCombo, titles.toArray());
+            updateCombo(departmentCombo, departments.toArray(new Department[0]));
+            updateCombo(positionCombo, positions.toArray(new Position[0]));
+            updateCombo(titleCombo, titles.toArray(new TitleInfo[0]));
             updateTable((DefaultTableModel) departmentTable.getModel(), departments.stream()
                     .map(d -> new Object[]{d.id(), d.name(), d.headcount()})
                     .toList());
@@ -386,12 +386,11 @@ public class StaffMainPanel extends JPanel {
         });
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private void updateCombo(JComboBox<?> comboBox, Object[] items) {
+    private <T> void updateCombo(JComboBox<T> comboBox, T[] items) {
         if (comboBox == null) {
             return;
         }
-        DefaultComboBoxModel model = new DefaultComboBoxModel(items);
+        DefaultComboBoxModel<T> model = new DefaultComboBoxModel<>(items);
         comboBox.setModel(model);
         if (items.length > 0) {
             comboBox.setSelectedIndex(0);

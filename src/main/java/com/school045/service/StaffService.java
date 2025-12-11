@@ -56,7 +56,7 @@ public class StaffService {
     }
 
     public void saveDepartment(String name) throws SQLException {
-        String sql = "INSERT INTO department045(name) VALUES (?) ON DUPLICATE KEY UPDATE name=VALUES(name)";
+        String sql = "INSERT INTO department045(name) VALUES (?) AS incoming ON DUPLICATE KEY UPDATE name=incoming.name";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -65,7 +65,7 @@ public class StaffService {
     }
 
     public void savePosition(String name) throws SQLException {
-        String sql = "INSERT INTO position045(name) VALUES (?) ON DUPLICATE KEY UPDATE name=VALUES(name)";
+        String sql = "INSERT INTO position045(name) VALUES (?) AS incoming ON DUPLICATE KEY UPDATE name=incoming.name";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -74,7 +74,7 @@ public class StaffService {
     }
 
     public void saveTitle(String name) throws SQLException {
-        String sql = "INSERT INTO title045(name) VALUES (?) ON DUPLICATE KEY UPDATE name=VALUES(name)";
+        String sql = "INSERT INTO title045(name) VALUES (?) AS incoming ON DUPLICATE KEY UPDATE name=incoming.name";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -89,17 +89,17 @@ public class StaffService {
         String sql = """
                 INSERT INTO staff045
                 (staff_code, full_name, gender, email, phone, department_id, position_id, title_id, status, hire_date)
-                VALUES (?,?,?,?,?,?,?,?,?,?)
+                VALUES (?,?,?,?,?,?,?,?,?,?) AS incoming
                 ON DUPLICATE KEY UPDATE
-                    full_name=VALUES(full_name),
-                    gender=VALUES(gender),
-                    email=VALUES(email),
-                    phone=VALUES(phone),
-                    department_id=VALUES(department_id),
-                    position_id=VALUES(position_id),
-                    title_id=VALUES(title_id),
-                    status=VALUES(status),
-                    hire_date=VALUES(hire_date)
+                    full_name=incoming.full_name,
+                    gender=incoming.gender,
+                    email=incoming.email,
+                    phone=incoming.phone,
+                    department_id=incoming.department_id,
+                    position_id=incoming.position_id,
+                    title_id=incoming.title_id,
+                    status=incoming.status,
+                    hire_date=incoming.hire_date
                 """;
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -103,10 +103,10 @@ CREATE PROCEDURE sp_department_title_counts045()
 
 -- Seed basic dictionaries for quick start
 INSERT INTO department045(name) VALUES ('教务处'), ('信息中心'), ('人事处')
-ON DUPLICATE KEY UPDATE name=VALUES(name);
+AS seed ON DUPLICATE KEY UPDATE name=seed.name;
 
 INSERT INTO position045(name) VALUES ('教师'), ('行政'), ('教研员')
-ON DUPLICATE KEY UPDATE name=VALUES(name);
+AS seed ON DUPLICATE KEY UPDATE name=seed.name;
 
 INSERT INTO title045(name) VALUES ('助教'), ('讲师'), ('副教授'), ('教授')
-ON DUPLICATE KEY UPDATE name=VALUES(name);
+AS seed ON DUPLICATE KEY UPDATE name=seed.name;
