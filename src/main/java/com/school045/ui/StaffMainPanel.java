@@ -110,7 +110,7 @@ public class StaffMainPanel extends JPanel {
         departmentCombo = new JComboBox<>();
         positionCombo = new JComboBox<>();
         titleCombo = new JComboBox<>();
-        JTextField hireDateField = new JTextField("2025-01-01");
+        JTextField hireDateField = new JTextField(LocalDate.now().toString());
 
         form.add(new JLabel("工号/编号"));
         form.add(staffCodeField);
@@ -197,8 +197,8 @@ public class StaffMainPanel extends JPanel {
         JTextField staffCodeField = new JTextField();
         JTextField degreeField = new JTextField();
         JTextField majorField = new JTextField();
-        JTextField startDateField = new JTextField("2020-09-01");
-        JTextField endDateField = new JTextField("2024-06-30");
+        JTextField startDateField = new JTextField(LocalDate.now().minusYears(4).toString());
+        JTextField endDateField = new JTextField(LocalDate.now().toString());
 
         JButton addButton = new JButton("添加教育经历");
         addButton.addActionListener(e -> safeRun(() -> {
@@ -263,7 +263,7 @@ public class StaffMainPanel extends JPanel {
         JTextField staffCodeField = new JTextField();
         JComboBox<String> typeCombo = new JComboBox<>(new String[]{"REWARD", "PUNISHMENT"});
         JTextField descriptionField = new JTextField();
-        JTextField dateField = new JTextField("2024-12-01");
+        JTextField dateField = new JTextField(LocalDate.now().toString());
 
         JButton addButton = new JButton("保存奖惩记录");
         addButton.addActionListener(e -> safeRun(() -> {
@@ -364,10 +364,10 @@ public class StaffMainPanel extends JPanel {
     private void refreshStaffTable() {
         safeRun(() -> {
             List<StaffView> staff = service.searchStaff(
-                    filterDepartmentField != null ? filterDepartmentField.getText() : "",
-                    filterTitleField != null ? filterTitleField.getText() : "",
-                    filterPositionField != null ? filterPositionField.getText() : "",
-                    filterStatusCombo != null && filterStatusCombo.getSelectedItem() != null
+                    filterDepartmentField.getText(),
+                    filterTitleField.getText(),
+                    filterPositionField.getText(),
+                    filterStatusCombo.getSelectedItem() != null
                             ? filterStatusCombo.getSelectedItem().toString()
                             : ""
             );

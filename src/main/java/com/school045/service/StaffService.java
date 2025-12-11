@@ -5,6 +5,7 @@ import com.school045.model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -251,6 +252,9 @@ public class StaffService {
                 return collectReportRows(rs);
             } catch (SQLException callEx) {
                 // fall back to inline query when stored procedure is not present
+                if (!"42000".equals(callEx.getSQLState()) && callEx.getErrorCode() != 1305) {
+                    throw callEx;
+                }
                 try (ResultSet rs = stmt.executeQuery("""
                         SELECT d.name AS department, t.name AS title, COUNT(s.id) AS staff_count
                         FROM department045 d
@@ -297,6 +301,10 @@ public class StaffService {
         if (value == null || value.isBlank()) {
             return null;
         }
-        return LocalDate.parse(value.trim());
+        try {
+            return LocalDate.parse(value.trim());
+        } catch (DateTimeParseException ex) {
+            throw new IllegalArgumentException("日期格式应为 yyyy-MM-dd，例如 2025-01-01", ex);
+        }
     }
 }

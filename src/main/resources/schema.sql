@@ -87,12 +87,12 @@ CREATE TRIGGER trg_staff_department_update045 AFTER UPDATE ON staff045
 FOR EACH ROW
 UPDATE department045 d
 SET headcount = headcount + CASE
+                               WHEN OLD.department_id = NEW.department_id THEN 0
                                WHEN d.id = NEW.department_id THEN 1
                                WHEN d.id = OLD.department_id THEN -1
                                ELSE 0
                              END
-WHERE OLD.department_id <> NEW.department_id
-  AND d.id IN (OLD.department_id, NEW.department_id);
+WHERE d.id IN (OLD.department_id, NEW.department_id);
 
 DROP PROCEDURE IF EXISTS sp_department_title_counts045;
 CREATE PROCEDURE sp_department_title_counts045()
