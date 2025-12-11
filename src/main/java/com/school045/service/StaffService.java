@@ -83,6 +83,9 @@ public class StaffService {
     }
 
     public void saveStaff(Staff staff) throws SQLException {
+        if (staff.departmentId() == null) {
+            throw new SQLException("部门不能为空");
+        }
         String sql = """
                 INSERT INTO staff045
                 (staff_code, full_name, gender, email, phone, department_id, position_id, title_id, status, hire_date)
@@ -105,7 +108,7 @@ public class StaffService {
             ps.setString(3, staff.gender());
             ps.setString(4, staff.email());
             ps.setString(5, staff.phone());
-            setNullableInteger(ps, 6, staff.departmentId());
+            ps.setInt(6, staff.departmentId());
             setNullableInteger(ps, 7, staff.positionId());
             setNullableInteger(ps, 8, staff.titleId());
             ps.setString(9, staff.status());

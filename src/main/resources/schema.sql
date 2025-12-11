@@ -88,7 +88,8 @@ FOR EACH ROW
 UPDATE department045 d
 SET headcount = headcount + CASE WHEN d.id = NEW.department_id THEN 1 ELSE 0 END
                   + CASE WHEN d.id = OLD.department_id THEN -1 ELSE 0 END
-WHERE d.id IN (OLD.department_id, NEW.department_id);
+WHERE OLD.department_id <> NEW.department_id
+  AND d.id IN (OLD.department_id, NEW.department_id);
 
 DROP PROCEDURE IF EXISTS sp_department_title_counts045;
 CREATE PROCEDURE sp_department_title_counts045()
